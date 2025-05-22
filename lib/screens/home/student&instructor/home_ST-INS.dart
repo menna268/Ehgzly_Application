@@ -3,6 +3,7 @@ import 'package:flutter_application_1/screens/Catigory/catigory.dart';
 import 'package:flutter_application_1/screens/Chat/chatscreen.dart';
 import 'package:flutter_application_1/screens/Profile/profile.dart';
 import 'package:flutter_application_1/screens/Widgets/side_menus/side_menu.dart';
+import 'package:flutter_application_1/screens/home/WorkSpace/bottom_navigation.dart';
 import 'package:flutter_application_1/screens/home/WorkSpace/spaces.dart';
 
 import 'package:flutter_application_1/screens/home/student&instructor/YourCourses/addcourse.dart';
@@ -12,7 +13,6 @@ import 'package:flutter_application_1/screens/home/student&instructor/enrolled.d
 import 'package:flutter_application_1/screens/home/student&instructor/favFields.dart';
 import 'package:flutter_application_1/screens/home/student&instructor/homeappbar.dart';
 import 'package:flutter_application_1/screens/home/student&instructor/workspace_reserve.dart';
-
 
 //المعلومات اللي محتاجاها لاي كورس
 class Course {
@@ -62,6 +62,10 @@ class Favfields {
 }
 
 class HomeSt_INS extends StatefulWidget {
+  final String? email; //بحدد نوع ال account
+
+  HomeSt_INS({this.email});
+
   @override
   _HomeSt_INSState createState() => _HomeSt_INSState();
 }
@@ -75,13 +79,6 @@ class _HomeSt_INSState extends State<HomeSt_INS> {
       _selectedIndex = index;
     });
   }
- //bottom navigation
-  final List<Widget> _pages = [
-     HomeSt_INS(), 
-     CategoriesApp(),
-     ChatScreen(),
-     ProfilePage(),
-  ];
 
   //التابات اللي فوق
   final List<String> _categories = [
@@ -92,6 +89,11 @@ class _HomeSt_INSState extends State<HomeSt_INS> {
     "WorkSpaces",
     "Your Courses",
   ];
+  void checkAndRemove() {
+    if (widget.email == 'student@example.com') {
+      _categories.remove("Your Courses");
+    }
+  }
 
   List<Space> filteredSpaces = [];
   int _selectedCategoryIndex = 0;
@@ -253,14 +255,12 @@ class _HomeSt_INSState extends State<HomeSt_INS> {
       spaceNumber: 3000,
       status: 'Completed',
       id: 1,
-
       selectedFeatures: [
         'High-speed Internet (Wi-Fi)',
         'Display screens / Projector',
         'Air conditioning / Heating',
       ],
     ),
-
     Space(
       workspacename: 'Nourhan Mahmoud',
       spaceimageUrl: 'asset/imges/blobid1627218317141.jpg',
@@ -361,20 +361,20 @@ class _HomeSt_INSState extends State<HomeSt_INS> {
       crossAxisSpacing: 10,
       mainAxisSpacing: 12,
       childAspectRatio: 0.70,
-      children:
-          yourCourses.map((course) {
-            return YourCourses(course, () {
-              setState(() {
-                course.isFavorite = !course.isFavorite;
-              });
-            });
-          }).toList(),
+      children: yourCourses.map((course) {
+        return YourCourses(course, () {
+          setState(() {
+            course.isFavorite = !course.isFavorite;
+          });
+        });
+      }).toList(),
     );
   }
 
   // بناء "Your Courses"
   Widget buildEnrolledCourses() {
-    final enrolledCourses = _courses.where((course) => course.enrolled == true).toList();
+    final enrolledCourses =
+        _courses.where((course) => course.enrolled == true).toList();
 
     if (enrolledCourses.isEmpty) {
       return Center(
@@ -390,16 +390,22 @@ class _HomeSt_INSState extends State<HomeSt_INS> {
       crossAxisSpacing: 10,
       mainAxisSpacing: 12,
       childAspectRatio: 0.70,
-      children:
-          enrolledCourses.map((course) {
-            return Enrolled(course, () {
-              setState(() {
-                course.isFavorite = !course.isFavorite;
-              });
-            });
-          }).toList(),
+      children: enrolledCourses.map((course) {
+        return Enrolled(course, () {
+          setState(() {
+            course.isFavorite = !course.isFavorite;
+          });
+        });
+      }).toList(),
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    checkAndRemove();
+  }
+
   @override
   Widget build(BuildContext context) {
     final String searchText = _searchController.text.toLowerCase();
@@ -408,15 +414,17 @@ class _HomeSt_INSState extends State<HomeSt_INS> {
     List<Space> getFilteredSpaces(String searchText) {
       return _spaces.where((space) {
         final matchesSearch = space.workspacename.toLowerCase().contains(
-          searchText,
-        );
+              searchText,
+            );
         return matchesSearch;
       }).toList();
     }
-   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-   
+
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
     List<Space> filteredSpaces = getFilteredSpaces(searchText);
-  return Scaffold(
+
+    return Scaffold(
       key: _scaffoldKey,
       appBar: buildCustomAppBar(
         onMenuPressed: () {
@@ -486,17 +494,16 @@ class _HomeSt_INSState extends State<HomeSt_INS> {
                 decoration: InputDecoration(
                   hintText: 'Search',
                   prefixIcon: Icon(Icons.search, color: Colors.black),
-                  suffixIcon:
-                      _searchController.text.isNotEmpty
-                          ? IconButton(
-                            icon: Icon(Icons.clear, color: Colors.black),
-                            onPressed: () {
-                              setState(() {
-                                _searchController.clear();
-                              });
-                            },
-                          )
-                          : null,
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(Icons.clear, color: Colors.black),
+                          onPressed: () {
+                            setState(() {
+                              _searchController.clear();
+                            });
+                          },
+                        )
+                      : null,
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding: const EdgeInsets.symmetric(
@@ -527,18 +534,17 @@ class _HomeSt_INSState extends State<HomeSt_INS> {
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 12,
                         childAspectRatio: 0.65,
-                        children:
-                            filteredSpaces
-                                .map((space) => WorkSpace(context, space))
-                                .toList(),
+                        children: filteredSpaces
+                            .map((space) => WorkSpace(context, space))
+                            .toList(),
                       );
                     } else if (selectedCategory == "Favorite Courses") {
-                      coursesToShow =
-                          filteredCourses
-                              .where((course) => course.isFavorite)
-                              .toList();
+                      coursesToShow = filteredCourses
+                          .where((course) => course.isFavorite)
+                          .toList();
                     } else if (selectedCategory == "Enrolled") {
-                      return Expanded(child: Center(child: buildEnrolledCourses()));
+                      return Expanded(
+                          child: Center(child: buildEnrolledCourses()));
                     } else if (selectedCategory == "Favorite Fields") {
                       final favFieldsList = Favfields().all;
                       return buildFavFields(favFieldsList, _courses, (
@@ -601,14 +607,13 @@ class _HomeSt_INSState extends State<HomeSt_INS> {
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 12,
                       childAspectRatio: 0.65,
-                      children:
-                          coursesToShow.map((course) {
-                            return AllCourses(course, () {
-                              setState(() {
-                                course.isFavorite = !course.isFavorite;
-                              });
-                            }, context);
-                          }).toList(),
+                      children: coursesToShow.map((course) {
+                        return AllCourses(course, () {
+                          setState(() {
+                            course.isFavorite = !course.isFavorite;
+                          });
+                        }, context);
+                      }).toList(),
                     );
                   },
                 ),
