@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/home/WorkSpace/bottom_navigation.dart';
 import 'package:flutter_application_1/screens/home/WorkSpace/workspace_home.dart';
 import 'package:flutter_application_1/screens/home/student&instructor/home_ST-INS.dart';
 
@@ -36,9 +37,9 @@ class _LoginScreenState extends State<LoginScreen> {
         Widget nextScreen;
 
         if (email == 'student@example.com') {
-          nextScreen = HomeSt_INS();
+          nextScreen = MainPage(email: email);
         } else if (email == 'instructor@example.com') {
-          nextScreen = HomeSt_INS();
+          nextScreen = MainPage(email: email);
         } else {
           nextScreen = Home_workspace();
         }
