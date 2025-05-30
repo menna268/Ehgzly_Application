@@ -1,4 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/firebase_options.dart';
 import 'package:flutter_application_1/screens/Catigory/catigory.dart';
 import 'package:flutter_application_1/screens/Chat/chatscreen.dart';
 import 'package:flutter_application_1/screens/Login/login_screen.dart';
@@ -11,7 +13,6 @@ import 'package:flutter_application_1/screens/home/WorkSpace/balance.dart';
 import 'package:flutter_application_1/screens/home/WorkSpace/workspace_home.dart';
 import 'package:flutter_application_1/screens/home/student&instructor/YourCourses/addcourse.dart';
 import 'package:flutter_application_1/screens/home/student&instructor/home_ST-INS.dart';
-
 import 'package:flutter_application_1/screens/onBording/onbording_screen.dart';
 import 'package:flutter_application_1/screens/registeration/otp_screen.dart';
 import 'package:flutter_application_1/screens/registeration/register_screen.dart';
@@ -19,8 +20,11 @@ import 'package:flutter_application_1/screens/registeration/success_screen.dart'
 import 'package:flutter_application_1/screens/Splash/splash.dart';
 import 'package:flutter_application_1/screens/registeration/userinfo.dart';
 
-
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -34,24 +38,23 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.light(useMaterial3: true),
       initialRoute: '/',
       routes: {
-        '/': (context) =>  Splash(),
-        
-        '/onboarding': (context) =>  const OnBoarding(),
-        '/login': (context) =>  const LoginScreen(),
-        '/register': (context) =>  const RegisterScreen(),
-        '/otp': (context) =>  const OtpScreen(),
-        '/success': (context) =>  const SuccessScreen(),
-        '/profile': (context) =>  ProfilePage(),
+        '/': (context) => Splash(),
+        '/onboarding': (context) => const OnBoarding(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/otp': (context) => const OtpScreen(),
+        '/success': (context) => const SuccessScreen(),
+        '/profile': (context) => ProfilePage(),
         '/Editpro': (context) => const EditProfilePage(),
-        '/workspace': (context) =>  Home_workspace(),
+        '/workspace': (context) => Home_workspace(),
         '/support': (context) => const Support(),
-        '/setting': (context) => SettingsScreen() ,
-        '/chat': (context) =>  ChatScreen(),
-        '/info': (context) =>  UserInfoPage(),
+        '/setting': (context) => SettingsScreen(),
+        '/chat': (context) => ChatScreen(),
+        '/info': (context) => UserInfoPage(),
         '/balance': (context) => const BalancePage(),
         '/note': (context) => const NotificationsScreen(),
-        '/home': (context) =>  HomeSt_INS(),
-        '/add': (context) =>const AddCourse(),
+        '/home': (context) => HomeSt_INS(),
+        '/add': (context) => const AddCourse(),
         '/caat': (context) => CategoriesApp(),
       },
     );
