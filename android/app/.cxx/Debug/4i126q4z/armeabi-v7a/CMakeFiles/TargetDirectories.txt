@@ -1,0 +1,2 @@
+C:/Users/Manara/Ehgzly_Application/android/app/.cxx/Debug/4i126q4z/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Manara/Ehgzly_Application/android/app/.cxx/Debug/4i126q4z/armeabi-v7a/CMakeFiles/rebuild_cache.dir
